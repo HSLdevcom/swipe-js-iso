@@ -27,7 +27,7 @@
       addEventListener: !!window.addEventListener,
       touch:
         'ontouchstart' in window ||
-        'onmousedown' in window ||
+        (options.enableCursor && 'onmousedown' in window) ||
         (window.DocumentTouch && document instanceof window.DocumentTouch),
       transitions: (function(temp) {
         var props = [
@@ -233,28 +233,23 @@
     var events = {
       handleEvent: function(event) {
         switch (event.type) {
-          case 'mousedown': {
+          case 'mousedown':
             this.start(event);
             break;
-          }
-          case 'mousemove': {
-            this.move(event);
-            break;
-          }
-          case 'mouseout': {
-            offloadFn(this.end(event));
-            break;
-          }
-
-          case 'mouseup': {
-            offloadFn(this.end(event));
-            break;
-          }
           case 'touchstart':
             this.start(event);
             break;
+          case 'mousemove':
+            this.move(event);
+            break;
           case 'touchmove':
             this.move(event);
+            break;
+          case 'mouseout':
+            offloadFn(this.end(event));
+            break;
+          case 'mouseup':
+            offloadFn(this.end(event));
             break;
           case 'touchend':
             offloadFn(this.end(event));
