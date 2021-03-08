@@ -246,7 +246,9 @@
             this.move(event);
             break;
           case 'mouseout':
-            offloadFn(this.end(event));
+            if (event.clientX <= 0 || event.clientX > width) {
+              offloadFn(this.end(event));
+            }
             break;
           case 'mouseup':
             offloadFn(this.end(event));
@@ -298,7 +300,6 @@
 
         element.addEventListener('mousemove', this, false);
         element.addEventListener('mouseup', this, false);
-        element.addEventListener('mouseover', this, false);
         element.addEventListener('mouseout', this, false);
       },
       move: function(event) {
@@ -472,7 +473,6 @@
         element.addEventListener('touchforcechange', function() {}, false);
 
         element.addEventListener('mousedown', events, false);
-        element.addEventListener('mouseup', events, false);
       }
 
       if (browser.transitions) {
@@ -548,6 +548,7 @@
         if (browser.addEventListener) {
           // remove current event listeners
           element.removeEventListener('touchstart', events, false);
+          element.removeEventListener('mousedown', events, false);
           element.removeEventListener('webkitTransitionEnd', events, false);
           element.removeEventListener('msTransitionEnd', events, false);
           element.removeEventListener('oTransitionEnd', events, false);
